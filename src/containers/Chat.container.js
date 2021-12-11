@@ -18,9 +18,18 @@ const ChatContainer = () => {
         setName(name);
         setRoomName(room);
 
+        /**
+         * It is used to connect to the SERVER URL mentioned.
+         */
         const initSocket = io("localhost:5050");
+
         setSocket(initSocket);
 
+        /**
+         * JOIN is an event called from the Front-end.
+         * NAME & ROOM are passed as object from the Front-end.
+         * It is used to join a new user to the room.
+         */
         initSocket.emit(
             "join",
             {
@@ -33,7 +42,6 @@ const ChatContainer = () => {
         );
 
         return () => {
-            console.log("Disconnecting");
             initSocket.disconnect();
             initSocket.off();
         };
@@ -41,9 +49,11 @@ const ChatContainer = () => {
 
     useEffect(() => {
         if (socket) {
+            /**
+             * MESSAGE is an event called from the Back-end.
+             * It is used to send the messages to the Front-end.
+             */
             socket.on("message", (message) => {
-                console.log(message);
-
                 setMessages((prevMessages) => {
                     return [...prevMessages, message];
                 });
@@ -57,6 +67,11 @@ const ChatContainer = () => {
         event.preventDefault();
 
         if (message) {
+            /**
+             * SEND MESSAGE is an event called from the Front-end.
+             * MESSAGE is passed a parameter from the Front-end.
+             * It is used to send a message.
+             */
             socket.emit("sendMessage", message, () => {
                 setMessage("");
             });
@@ -70,7 +85,7 @@ const ChatContainer = () => {
             {messages.map((message, index) => {
                 return (
                     <div key={index}>
-                        <div>Message is {message.text}</div>
+                        <div>Message is {message.message}</div>
 
                         <div>From {message.user}</div>
                     </div>
