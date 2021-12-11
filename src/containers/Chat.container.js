@@ -37,7 +37,7 @@ const ChatContainer = () => {
                 room,
             },
             (error) => {
-                console.log(error);
+                if (error) console.log(error);
             }
         );
 
@@ -85,9 +85,9 @@ const ChatContainer = () => {
             {messages.map((message, index) => {
                 return (
                     <div key={index}>
-                        <div>Message is {message.message}</div>
-
-                        <div>From {message.user}</div>
+                        <div>
+                            {message.user} - {message.message}
+                        </div>
                     </div>
                 );
             })}
